@@ -1,38 +1,57 @@
 import logo from './logo.svg';
 import './App.css';
 import { selectionDetails } from './util';
-import {useState} from 'react';
+import { useState } from 'react';
 
 function App() {
-  const [selectedSeletion,setSelectedSeletion]=useState(null);
+  const [selectedSeletion, setSelectedSeletion] = useState([]);
+  const [enableMultiSelection, SetEnableMultiSelection] = useState(false);
 
-  const handleSlection=(id)=>{
-    if(id==selectedSeletion){
-      setSelectedSeletion(null);
-      return;
-    }
-    setSelectedSeletion(id);
+  const handleSlection = (id) => {
+    setSelectedSeletion(prevSelection =>
+      !enableMultiSelection ?
+        prevSelection.includes(id) ? [] : [id] :
+        prevSelection.includes(id) ? prevSelection.filter(pre => pre !== id) : [...selectedSeletion, id]
+    )
+  }
 
+  const handleChoice = () => {
+    SetEnableMultiSelection(pre => !pre);
+    setSelectedSeletion([])
   }
 
   return (
     <div className="mainselection">
-     <div className='selection'>
-       {
-        selectionDetails ? selectionDetails?.map((item, index) => (
-          <div key={item.id}>
-            <div onClick={()=>handleSlection(item?.id)} className='card'>
-              <span>{item?.title}</span>
-              <span>+</span>
-               {
-             selectedSeletion == item.id &&  <div className='openSelection'>
-                <p>{item?.description}</p>
+      <div>
+        <h3 className='heading'> Multi Selection</h3>
+      </div>
+      <div>
+        <button className='btn' onClick={handleChoice}>{!enableMultiSelection ? "Enable Multi Selection" : "Enable Single Selction"}</button>
+      </div>
+      <div>
+
+      </div>
+      <div className='selection'>
+        {
+          selectionDetails ? selectionDetails?.map((item, index) => (
+            <div key={item.id}>
+              <div className='card'>
+                <div className='cardBody'>
+                  <div>{item?.title}</div>
+                  <div className='expandBtn' onClick={() => handleSlection(item?.id)} >{
+                    selectedSeletion.includes(item.id) ? '-' : '+'
+                  }</div>
+                </div>
+                {
+                  selectedSeletion.includes(item.id) &&
+                  <div className='cardBody1'>
+                    <p>{item?.description}</p>
+                  </div>
+                }
               </div>
-             }
             </div>
-          </div>
-        )): null}
-     </div>
+          )) : null}
+      </div>
     </div>
   );
 }
