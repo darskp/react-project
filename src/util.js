@@ -1,0 +1,22 @@
+export const selectionDetails=[
+    {
+        id:1,
+        title:"A",
+        description:"B"
+    },
+     {
+        id:2,
+        title:"A",
+        description:"B"
+    },
+     {
+        id:3,
+        title:"A",
+        description:"B"
+    },
+     {
+        id:4,
+        title:"A",
+        description:"B"
+    }
+]
